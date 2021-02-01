@@ -1,0 +1,3 @@
+[submodule "CUDAImageUtilities"]
+	path = CUDAImageUtilities
+	url = https://github.com/rasidin/CUDAImageUtilities.git
