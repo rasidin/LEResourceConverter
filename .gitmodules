@@ -4,3 +4,6 @@
 [submodule "LEMath"]
 	path = LEMath
 	url = https://github.com/rasidin/LEMath.git
+[submodule "LimitEngineV2"]
+	path = LimitEngineV2
+	url = https://github.com/rasidin/LimitEngineV2.git

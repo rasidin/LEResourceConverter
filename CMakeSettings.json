@@ -7,7 +7,7 @@
       "inheritEnvironments": [ "msvc_x64" ],
       "buildRoot": "${projectDir}\\build\\${name}",
       "installRoot": "${projectDir}\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-DRAYTRACING=ON -DWIN32=ON",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": []
