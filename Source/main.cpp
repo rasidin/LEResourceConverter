@@ -187,7 +187,9 @@ int main(int argc, char **argv)
     arguments.PrintToLog();
 
     const char *command = arguments.GetCommand();
-    sLog % LogLevelDebug << "Command : " | command;
+    if (command) {
+        sLog% LogLevelDebug << "Command : " | command;
+    }
 
     LimitEngine::ResourceManager *leResourceManager = new LimitEngine::ResourceManager();
     LimitEngine::TaskManager *leTaskManager = new LimitEngine::TaskManager();

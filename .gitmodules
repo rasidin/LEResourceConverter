@@ -1,3 +1,6 @@
 [submodule "CUDAImageUtilities"]
 	path = CUDAImageUtilities
 	url = https://github.com/rasidin/CUDAImageUtilities.git
+[submodule "LEMath"]
+	path = LEMath
+	url = https://github.com/rasidin/LEMath.git
