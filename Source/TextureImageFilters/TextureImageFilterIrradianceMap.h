@@ -63,6 +63,7 @@ public:
 		return true;
 	}
 	virtual LimitEngine::RendererFlag::BufferFormat GetFilteredImageFormat() const override { return LimitEngine::RendererFlag::BufferFormat::R32G32B32A32_Float; }
+	virtual uint32 GetMipCount() const override { return 1u; }
 };
 
 #endif // LERESOURCECONVERTER_TEXTUREIMAGEFILTERIRRADIANCEMAP_H_

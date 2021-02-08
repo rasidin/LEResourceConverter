@@ -85,7 +85,7 @@ struct Logger {
         return *this;
     }
     Logger& operator | (const char *Text) {
-        if (Verbose < CurrentVerbose) return *this;
+        if (Verbose < CurrentVerbose || Text == nullptr) return *this;
         printf(Text);
         IsLogging = true;
         return *this;

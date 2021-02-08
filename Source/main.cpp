@@ -58,7 +58,8 @@ void PrintUsage()
     LOG_USAGE<<" let - convert to LimitEngineTexture";
     LOG_USAGE<<" font - convert font";
     LOG_USAGE<<" irr - generate irradiance map (Spherical)";
-    LOG_USAGE<<" ref - generate reflection map (Spherical)";
+    LOG_USAGE<<" pfr - generate prefiltered reflection map (Spherical)";
+    LOG_USAGE<<" ebl - generate environment BRDF 2D LUT";
     LOG_USAGE<<"Options :";
     LOG_USAGE<<" -i=Input file (or Image file)";
     LOG_USAGE<<" -o=Output file";
@@ -213,12 +214,12 @@ int main(int argc, char **argv)
         if (arguments.Contains("-s")) {
             Options.SampleCount = atoi(arguments["-s"]);
         }
-        Options.GenerateIrradiance = true;
+        Options.Filter = TextureConverter::ConvertOptions::FilterType::Irradiance;
         if (!converter.Convert(arguments["-i"], arguments["-o"], Options)) {
             return PrintError(ReturnValue::FailedToConvert);
         }
     }
-    else if (strcmp(command, "ref") == 0) {
+    else if (strcmp(command, "pfe") == 0) {
         TextureConverter converter;
         TextureConverter::ConvertOptions Options;
         if (arguments.Contains("-w") && arguments.Contains("-h")) {
@@ -228,12 +229,12 @@ int main(int argc, char **argv)
         if (arguments.Contains("-s")) {
             Options.SampleCount = atoi(arguments["-s"]);
         }
-        Options.GenerateReflection = true;
+        Options.Filter = TextureConverter::ConvertOptions::FilterType::PrefilteredEnvironment;
         if (!converter.Convert(arguments["-i"], arguments["-o"], Options)) {
             return PrintError(ReturnValue::FailedToConvert);
         }
     }
-    else if (strcmp(command, "evb") == 0) {
+    else if (strcmp(command, "ebl") == 0) {
         TextureConverter converter;
         TextureConverter::ConvertOptions Options;
         if (arguments.Contains("-w") && arguments.Contains("-h")) {
@@ -243,8 +244,8 @@ int main(int argc, char **argv)
         if (arguments.Contains("-s")) {
             Options.SampleCount = atoi(arguments["-s"]);
         }
-        Options.GenerateEnvironmentBRDF = true;
-        if (!converter.Convert(arguments["-i"], arguments["-o"], Options)) {
+        Options.Filter = TextureConverter::ConvertOptions::FilterType::EnvironmentBRDFLUT;
+        if (!converter.Convert(nullptr, arguments["-o"], Options)) {
             return PrintError(ReturnValue::FailedToConvert);
         }
     }

@@ -34,12 +34,14 @@ class TextureConverter
 public:
     struct ConvertOptions
     {
+        enum class FilterType {
+            None = 0,
+            Irradiance,
+            PrefilteredEnvironment,
+            EnvironmentBRDFLUT,
+        } Filter = FilterType::None;
         LEMath::IntVector2 FilteredImageSize = LEMath::IntVector2::Zero;
         int SampleCount = 1024;
-
-        bool GenerateIrradiance = false;
-        bool GenerateReflection = false;
-        bool GenerateEnvironmentBRDF = false;
     };
 
 public:

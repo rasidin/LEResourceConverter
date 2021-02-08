@@ -34,5 +34,7 @@ target_link_libraries(LEResourceConverter
 
 add_test(TestConvertEXR LEResourceConverter let -i=../../Test/TestLET.exr -o=../../Test/TestLET.lea)
 add_test(TestGenerateIrradianceMap LEResourceConverter irr -i=../../Test/TestIRR.exr -w=2048 -h=1024 -s=1024 -o=../../Test/TestIRR.lea)
+add_test(TextGeneratePrefilteredEnvironmentMap LEResourceConverter pfe -i=../../Test/TestPFE.exr -w=2048 -h=1024 -s=1024 -o=../../Test/TestPFE.lea)
+add_test(TextGenerateEnvironmentBRDFLUT LEResourceConverter ebl -w=512 -h=512 -s=1024 -o=../../Test/TestEBL.lea)
 
 install(TARGETS LEResourceConverter DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

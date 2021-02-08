@@ -36,6 +36,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "EXRSourceFactory.h"
 
 #include "TextureImageFilters/TextureImageFilterIrradianceMap.h"
+#include "TextureImageFilters/TextureImageFilterEnvironmentBRDFLUT.h"
 
 bool TextureConverter::Convert(const char *InFilename, const char *OutFilename, const TextureConverter::ConvertOptions &Options)
 {
@@ -44,29 +45,43 @@ bool TextureConverter::Convert(const char *InFilename, const char *OutFilename, 
     LimitEngine::EXRSourceFactory *EXRFactory = new LimitEngine::EXRSourceFactory();
     LimitEngine::ResourceManager::GetSingleton().AddSourceFactory("exr", EXRFactory);
 
+    LimitEngine::AutoPointer<LimitEngine::ResourceManager::RESOURCE> loadedResource = nullptr;
+    LimitEngine::AutoPointer<LimitEngine::Texture> createdTexture = nullptr;
     LimitEngine::TextureImageFilter* filter = nullptr;
-
-    if (Options.GenerateIrradiance || Options.GenerateReflection || Options.GenerateEnvironmentBRDF)
+    LimitEngine::Texture* outtexture = nullptr;
     if (LimitEngine::TextureFactory *textureFactory = (LimitEngine::TextureFactory*)LimitEngine::ResourceManager::GetSingleton().GetFactory(LimitEngine::TextureFactory::ID)) {
-        if (Options.GenerateIrradiance) 
-            filter = new TextureImageFilterIrradianceMap(Options.SampleCount);
-        if (Options.GenerateReflection)
-            textureFactory->SetImportFilter(LimitEngine::TextureFactory::TextureImportFilter::Reflection);
-        if (Options.GenerateEnvironmentBRDF)
-            textureFactory->SetImportFilter(LimitEngine::TextureFactory::TextureImportFilter::EnvironmentBRDF);
         if (Options.FilteredImageSize != LEMath::IntVector2::Zero)
             textureFactory->SetSizeFilteredImage(Options.FilteredImageSize);
         textureFactory->SetSampleCount(Options.SampleCount);
-        textureFactory->SetImageFilter(filter);
+
+        switch (Options.Filter) {
+        case ConvertOptions::FilterType::Irradiance:
+            filter = new TextureImageFilterIrradianceMap(Options.SampleCount);
+            textureFactory->SetImageFilter(filter);
+            loadedResource = LimitEngine::ResourceManager::GetSingleton().GetResourceWithoutRegister(InFilename, LimitEngine::TextureFactory::ID);
+            if (loadedResource.Exists()) {
+                outtexture = (LimitEngine::Texture*)loadedResource->data;
+            }
+            delete filter;
+            filter = nullptr;
+            break;
+        case ConvertOptions::FilterType::PrefilteredEnvironment:
+            break;
+        case ConvertOptions::FilterType::EnvironmentBRDFLUT:
+            filter = new TextureImageFilterEnvironmentBRDFLUT(Options.SampleCount);
+            textureFactory->SetImageFilter(filter);
+            createdTexture = static_cast<LimitEngine::Texture*>(textureFactory->CreateEmpty(Options.FilteredImageSize, LimitEngine::RendererFlag::BufferFormat::R32G32_Float));
+            if (createdTexture.Exists()) {
+                outtexture = createdTexture.Get();
+            }
+            delete filter;
+            filter = nullptr;
+            break;
+        }
     }
 
-    LimitEngine::AutoPointer<LimitEngine::ResourceManager::RESOURCE> loadedResource = LimitEngine::ResourceManager::GetSingleton().GetResourceWithoutRegister(InFilename, LimitEngine::TextureFactory::ID);
-    if (LimitEngine::Texture *texture = static_cast<LimitEngine::Texture*>(loadedResource->data)) {
-        LimitEngine::ResourceManager::GetSingleton().SaveResource(OutFilename, texture);
-    }
-    
-    if (filter) {
-        delete filter;
+    if (outtexture) {
+        LimitEngine::ResourceManager::GetSingleton().SaveResource(OutFilename, outtexture);
     }
 
     return true;
