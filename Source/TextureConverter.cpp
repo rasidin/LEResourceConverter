@@ -36,6 +36,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "EXRSourceFactory.h"
 
 #include "TextureImageFilters/TextureImageFilterIrradianceMap.h"
+#include "TextureImageFilters/TextureImageFilterPrefilteredReflectionMap.h"
 #include "TextureImageFilters/TextureImageFilterEnvironmentBRDFLUT.h"
 
 bool TextureConverter::Convert(const char *InFilename, const char *OutFilename, const TextureConverter::ConvertOptions &Options)
@@ -66,6 +67,14 @@ bool TextureConverter::Convert(const char *InFilename, const char *OutFilename, 
             filter = nullptr;
             break;
         case ConvertOptions::FilterType::PrefilteredEnvironment:
+            filter = new TextureImageFilterPrefilteredReflectionMap(Options.SampleCount, (int32)log2f((float)Options.FilteredImageSize.Width()));
+            textureFactory->SetImageFilter(filter);
+            loadedResource = LimitEngine::ResourceManager::GetSingleton().GetResourceWithoutRegister(InFilename, LimitEngine::TextureFactory::ID);
+            if (loadedResource.Exists()) {
+                outtexture = (LimitEngine::Texture*)loadedResource->data;
+            }
+            delete filter;
+            filter = nullptr;
             break;
         case ConvertOptions::FilterType::EnvironmentBRDFLUT:
             filter = new TextureImageFilterEnvironmentBRDFLUT(Options.SampleCount);
