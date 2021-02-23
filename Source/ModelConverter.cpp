@@ -21,25 +21,29 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
- @file  FontConverter.cpp
- @brief converter for font
+ @file  ModelConverter.cpp
+ @brief model converter
  @author minseob (https://github.com/rasidin)
  *********************************************************************/
-#include "FontConverter.h"
+#include "ModelConverter.h"
 
-#include <Renderer/Font.h>
+#include <Factories/ModelFactory.h>
+#include <Renderer/Model.h>
 #include <Managers/ResourceManager.h>
 
 #include "Logger.h"
 #include "Definitions.h"
 
-bool FontConverter::Convert(const char *InImageFileName, const char *InTextFileName, const char *OutFileName)
+bool ModelConverter::Convert(const char* InFilename, const char* OutFilename, const ConvertOptions& Options)
 {
-    LOG_SUBLOG << "Convert" | InImageFileName | " + " | InTextFileName | " -> " | OutFileName;
+    LOG_SUBLOG << "Convert " | InFilename | " -> " | OutFilename;
 
-    if (LimitEngine::Font *OutFont = LimitEngine::Font::GenerateFromFile(InImageFileName, InTextFileName)) {
-        LimitEngine::ResourceManager::GetSingleton().SaveResource(OutFileName, OutFont);
+    LimitEngine::AutoPointer<LimitEngine::ResourceManager::RESOURCE> loadedresource = LimitEngine::ResourceManager::GetSingleton().GetResourceWithoutRegister(InFilename, LimitEngine::ModelFactory::ID);
+    if (loadedresource.Exists()) {
+        if (LimitEngine::Model* outmodel = (LimitEngine::Model*)loadedresource->data) {
+            LimitEngine::ResourceManager::GetSingleton().SaveResource(OutFilename, outmodel);
+            return true;
+        }
     }
-
-    return true;
+    return false;
 }

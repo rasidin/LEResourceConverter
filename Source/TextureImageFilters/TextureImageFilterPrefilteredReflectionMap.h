@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
 @file  TextureImageFilterIrradianceMap.h
 @brief Texture image filter for irradiance map
-@author minseob (leeminseob@outlook.com)
+@author minseob (https://github.com/rasidin)
 *********************************************************************/
 #ifndef LERESOURCECONVERTER_TEXTUREIMAGEFILTERPREFILTEREDREFLECTIONMAP_H_
 #define LERESOURCECONVERTER_TEXTUREIMAGEFILTERPREFILTEREDREFLECTIONMAP_H_

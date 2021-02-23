@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
  @file  TextureConverter.cpp
  @brief Texture converter
- @author minseob (leeminseob@outlook.com)
+ @author minseob (https://github.com/rasidin)
  *********************************************************************/
 #include "TextureConverter.h"
 

@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
  @file  FontConverter.h
  @brief font converter
- @author minseob (leeminseob@outlook.com)
+ @author minseob (https://github.com/rasidin)
  *********************************************************************/
 #pragma once
 

@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
  @file  main.cpp
  @brief main
- @author minseob (leeminseob@outlook.com)
+ @author minseob (https://github.com/rasidin)
  *********************************************************************/
 #include <string.h>
 #include <malloc.h>
@@ -35,6 +35,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 #include "TextureConverter.h"
 #include "FontConverter.h"
+#include "ModelConverter.h"
 
 #include "Definitions.h"
 #include "Logger.h"
@@ -246,6 +247,13 @@ int main(int argc, char **argv)
         }
         Options.Filter = TextureConverter::ConvertOptions::FilterType::EnvironmentBRDFLUT;
         if (!converter.Convert(nullptr, arguments["-o"], Options)) {
+            return PrintError(ReturnValue::FailedToConvert);
+        }
+    }
+    else if (strcmp(command, "mdl") == 0) {
+        ModelConverter converter;
+        ModelConverter::ConvertOptions options;
+        if (!converter.Convert(arguments["-i"], arguments["-o"], options)) {
             return PrintError(ReturnValue::FailedToConvert);
         }
     }

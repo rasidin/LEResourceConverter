@@ -20,7 +20,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
 @file ImageUtilities.h
 @brief Image utilities
-@author minseob (leeminseob@outlook.com)
+@author minseob (https://github.com/rasidin)
 **********************************************************************/
 #ifndef LERESOURCECONVERTER_IMAGEUTILITIES_H_
 #define LERESOURCECONVERTER_IMAGEUTILITIES_H_

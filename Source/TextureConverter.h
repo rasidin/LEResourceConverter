@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
  @file  TextureConverter.h
  @brief Converter for texture
- @author minseob (leeminseob@outlook.com)
+ @author minseob (https://github.com/rasidin)
  *********************************************************************/
 #pragma once
 

@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
 @file  TextureImageFilterEnvironmentBRDFLUT.h
 @brief Texture image filter for environment BRDF 2D LUT
-@author minseob (leeminseob@outlook.com)
+@author minseob (https://github.com/rasidin)
 *********************************************************************/
 #ifndef LERESOURCECONVERTER_TEXTUREIMAGEFILTERENVIRONMENTBRDFLUT_H_
 #define LERESOURCECONVERTER_TEXTUREIMAGEFILTERENVIRONMENTBRDFLUT_H_

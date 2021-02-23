@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
  @file  Definitions.h
  @brief Definitions
- @author minseob (leeminseob@outlook.com)
+ @author minseob (https://github.com/rasidin)
  *********************************************************************/
 
 #pragma once

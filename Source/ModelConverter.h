@@ -21,25 +21,25 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------
- @file  FontConverter.cpp
- @brief converter for font
+ @file  ModelConverter.h
+ @brief model converter
  @author minseob (https://github.com/rasidin)
  *********************************************************************/
-#include "FontConverter.h"
+#ifndef LERESOURCECONVERTER_MODELCONVERTER_H_
+#define LERESOURCECONVERTER_MODELCONVERTER_H_
 
-#include <Renderer/Font.h>
-#include <Managers/ResourceManager.h>
-
-#include "Logger.h"
-#include "Definitions.h"
-
-bool FontConverter::Convert(const char *InImageFileName, const char *InTextFileName, const char *OutFileName)
+class ModelConverter
 {
-    LOG_SUBLOG << "Convert" | InImageFileName | " + " | InTextFileName | " -> " | OutFileName;
+public:
+    struct ConvertOptions
+    {
+    };
 
-    if (LimitEngine::Font *OutFont = LimitEngine::Font::GenerateFromFile(InImageFileName, InTextFileName)) {
-        LimitEngine::ResourceManager::GetSingleton().SaveResource(OutFileName, OutFont);
-    }
+public:
+    ModelConverter() {}
+    ~ModelConverter() {}
 
-    return true;
-}
+    bool Convert(const char *InFilename, const char *OutFilename, const ConvertOptions &Options);
+};
+
+#endif // LERESOURCECONVERTER_MODELCONVERTER_H_
