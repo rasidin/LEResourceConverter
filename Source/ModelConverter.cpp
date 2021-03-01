@@ -27,6 +27,11 @@ OTHER DEALINGS IN THE SOFTWARE.
  *********************************************************************/
 #include "ModelConverter.h"
 
+#include <LEFloatVector3.h>
+#include <LEFloatVector4.h>
+#include <LEIntVector3.h>
+
+#include <Containers/VectorArray.h>
 #include <Factories/ModelFactory.h>
 #include <Renderer/Model.h>
 #include <Managers/ResourceManager.h>
@@ -41,6 +46,35 @@ bool ModelConverter::Convert(const char* InFilename, const char* OutFilename, co
     LimitEngine::AutoPointer<LimitEngine::ResourceManager::RESOURCE> loadedresource = LimitEngine::ResourceManager::GetSingleton().GetResourceWithoutRegister(InFilename, LimitEngine::ModelFactory::ID);
     if (loadedresource.Exists()) {
         if (LimitEngine::Model* outmodel = (LimitEngine::Model*)loadedresource->data) {
+            for (uint32 meshidx = 0; meshidx < outmodel->GetMeshCount(); meshidx++) {
+                LimitEngine::Model::MESH* mesh = outmodel->GetMesh(meshidx);
+                LimitEngine::RigidVertexBuffer* vtxbuf = (LimitEngine::RigidVertexBuffer*)mesh->vertexbuffer.Get();
+                LimitEngine::RigidVertex *vertices = vtxbuf->GetVertices();
+
+                // Need to generate normal
+                if (vertices->GetNormal().IsZero()) {
+                    // CPU compute version
+                    for (LimitEngine::Model::DRAWGROUP* drwgrp : mesh->drawgroups) {
+                        LimitEngine::VectorArray<LEMath::FloatVector3> polynormals;
+
+                        for (const LEMath::IntVector3& index : drwgrp->indices) {
+                            LEMath::FloatVector3 v0 = vertices[index.X()].GetPosition();
+                            LEMath::FloatVector3 v1 = vertices[index.Y()].GetPosition();
+                            LEMath::FloatVector3 v2 = vertices[index.Z()].GetPosition();
+
+                            LEMath::FloatVector3 v01 = v0 - v1;
+                            LEMath::FloatVector3 v21 = v2 - v1;
+
+                            LEMath::FloatVector3 normal = v01.CrossProduct(v21);
+                            normal = normal.Normalize();
+
+                            vertices[index.X()].SetNormal((vertices[index.X()].GetNormal() + normal).Normalize());
+                            vertices[index.Y()].SetNormal((vertices[index.Y()].GetNormal() + normal).Normalize());
+                            vertices[index.Z()].SetNormal((vertices[index.Z()].GetNormal() + normal).Normalize());
+                        }
+                    }
+                }
+            }
             LimitEngine::ResourceManager::GetSingleton().SaveResource(OutFilename, outmodel);
             return true;
         }
